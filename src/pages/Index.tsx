@@ -111,10 +111,10 @@ const Inicio = () => {
       <footer className="border-t border-border/30 py-6 bg-secondary/20 backdrop-blur-sm">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <div className="flex flex-wrap justify-center gap-4 mb-4">
-            <Link to="/documentacao">Documentação</Link>
-            <Link to="/about">Sobre</Link>
-            <Link to="/termos">Termos de Uso</Link>
-            <Link to="/privacidade">Privacidade</Link>
+            <RouterLink to="/documentacao" className="hover:text-foreground transition-colors">Documentação</RouterLink>
+            <RouterLink to="/about" className="hover:text-foreground transition-colors">Sobre</RouterLink>
+            <RouterLink to="/termos" className="hover:text-foreground transition-colors">Termos de Uso</RouterLink>
+            <RouterLink to="/privacidade" className="hover:text-foreground transition-colors">Privacidade</RouterLink>
           </div>
           <p>&copy; {new Date().getFullYear()} HutaDev Analisador. {t("footer.rights")}</p>
         </div>
@@ -122,14 +122,5 @@ const Inicio = () => {
     </div>
   );
 };
-
-const Link = ({ to, children }: { to: string, children: React.ReactNode }) => (
-  <RouterLink 
-    to={to} 
-    className="hover:text-foreground transition-colors"
-  >
-    {children}
-  </RouterLink>
-);
 
 export default Inicio;
