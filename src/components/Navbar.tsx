@@ -2,53 +2,65 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Code2, Info } from 'lucide-react';
+import { Code2, Info, FileText, BookOpen } from 'lucide-react';
 import AlternadorTema from './AlternadorTema';
+import SeletorIdioma from './LanguageSwitcher';
+import MenuMobile from './MobileMenu';
+import { useLanguage } from '@/utils/languageContext';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
+  const { t } = useLanguage();
 
   const itensNavegacao = [
-    { path: '/', label: 'Analisador de Código', icon: <Code2 className="w-5 h-5 mr-2" /> },
+    { path: '/', label: t("app.title"), icon: <Code2 className="w-5 h-5 mr-2" /> },
     { path: '/about', label: 'Sobre', icon: <Info className="w-5 h-5 mr-2" /> },
+    { path: '/documentacao', label: 'Documentação', icon: <BookOpen className="w-5 h-5 mr-2" /> },
+    { path: '/termos', label: 'Termos de Uso', icon: <FileText className="w-5 h-5 mr-2" /> },
+    { path: '/privacidade', label: 'Privacidade', icon: <FileText className="w-5 h-5 mr-2" /> },
   ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/40">
       <div className="container flex items-center justify-between h-16 px-4 md:px-6">
         <div className="flex items-center space-x-4">
+          <MenuMobile itensNavegacao={itensNavegacao} />
+          
           <Link 
             to="/" 
             className="flex items-center text-lg font-semibold tracking-tight transition-colors"
           >
             <Code2 className="w-6 h-6 mr-2 text-primary" />
-            <span>HutaDev Analisador</span>
+            <span className="hidden sm:inline-block">Analisador Huta</span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-4">
-            {itensNavegacao.map((item) => (
+          
+          <nav className="hidden md:flex items-center space-x-2">
+            {itensNavegacao.slice(0, 3).map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 className={cn(
                   "transition-all duration-200 px-3 py-2 rounded-md text-sm font-medium flex items-center",
                   location.pathname === item.path
-                    ? "text-primary font-semibold"
+                    ? "text-primary font-semibold bg-primary/5"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                 )}
               >
-                {item.label}
+                {item.path === '/' ? null : item.icon}
+                <span>{item.label === t("app.title") ? 'Início' : item.label}</span>
               </Link>
             ))}
           </nav>
         </div>
         
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
+          <SeletorIdioma />
           <AlternadorTema />
           <a 
             href="https://github.com/hutadev" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="hidden md:flex text-muted-foreground hover:text-foreground transition-colors"
             aria-label="GitHub"
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">

@@ -7,12 +7,18 @@ export interface CodeIssue {
   message: string;
   severity: 'error' | 'warning' | 'info';
   code: string;
+  category?: 'performance' | 'accessibility' | 'bestPractices' | 'seo' | 'cleanCode';
 }
 
 export interface CodeMetrics {
   linesOfCode: number;
   complexity: number;
   maintainability: number;
+  performance: number;
+  accessibility: number;
+  bestPractices: number;
+  seo: number;
+  cleanCode: number;
 }
 
 export interface AnalysisResult {
@@ -20,54 +26,126 @@ export interface AnalysisResult {
   metrics: CodeMetrics;
   suggestions: string[];
   score: number;
+  categoriesScore: {
+    performance: number;
+    accessibility: number;
+    bestPractices: number;
+    seo: number;
+    cleanCode: number;
+  };
 }
 
-// Simple code analysis function (placeholder for actual implementation)
 export const analyzeCode = (code: string, language: SupportedLanguage): AnalysisResult => {
-  // This is a simplified analysis - in a real app you'd integrate with linters/analyzers
+  // Implementação aprimorada de análise de código
   const lines = code.split('\n');
   const linesOfCode = lines.length;
   
-  // Generate some sample issues for demonstration
+  // Gerar alguns problemas de exemplo para demonstração
   const issues: CodeIssue[] = [];
   let complexity = Math.floor(Math.random() * 10) + 1;
   
-  // Some simple patterns to check
+  // Verificar problemas de desempenho
   lines.forEach((line, index) => {
-    // Check for long lines
+    // Problemas de desempenho
+    if (language === 'javascript' && line.includes('document.querySelectorAll')) {
+      issues.push({
+        line: index + 1,
+        column: line.indexOf('document.querySelectorAll'),
+        message: 'Considere caching de seletores frequentemente utilizados para melhor desempenho',
+        severity: 'warning',
+        code: 'perf-dom-queries',
+        category: 'performance'
+      });
+    }
+
+    // Problemas de acessibilidade
+    if (language === 'html' && line.includes('<img') && !line.includes('alt=')) {
+      issues.push({
+        line: index + 1,
+        column: line.indexOf('<img'),
+        message: 'Imagens devem ter atributo alt para acessibilidade',
+        severity: 'error',
+        code: 'a11y-img-alt',
+        category: 'accessibility'
+      });
+    }
+
+    // Boas práticas
+    if (language === 'javascript' && line.includes('var ')) {
+      issues.push({
+        line: index + 1,
+        column: line.indexOf('var '),
+        message: 'Use let/const em vez de var para declarações de variáveis',
+        severity: 'warning',
+        code: 'best-practice-no-var',
+        category: 'bestPractices'
+      });
+    }
+
+    // SEO
+    if (language === 'html' && line.includes('<h1') && 
+        lines.some((l, i) => i !== index && l.includes('<h1'))) {
+      issues.push({
+        line: index + 1,
+        column: line.indexOf('<h1'),
+        message: 'Múltiplas tags H1 prejudicam o SEO. Use apenas uma por página.',
+        severity: 'warning',
+        code: 'seo-multiple-h1',
+        category: 'seo'
+      });
+    }
+
+    // Código limpo - baseado no livro "Código Limpo"
+    if ((language === 'javascript' || language === 'java' || language === 'csharp') && 
+        (line.match(/function\s+\w+\s*\(/) || line.match(/\w+\s*=\s*function\s*\(/)) && 
+        line.length > 100) {
+      issues.push({
+        line: index + 1,
+        column: 1,
+        message: 'Funções devem ter uma única responsabilidade e não serem muito longas',
+        severity: 'info',
+        code: 'clean-code-function-length',
+        category: 'cleanCode'
+      });
+    }
+    
+    // Verificar linhas longas
     if (line.length > 100) {
       issues.push({
         line: index + 1,
         column: 1,
-        message: 'Line exceeds recommended length of 100 characters',
+        message: 'Linha excede o comprimento recomendado de 100 caracteres',
         severity: 'warning',
         code: 'max-len',
+        category: 'bestPractices'
       });
     }
     
-    // Check for console logs in production code
+    // Verificar console logs
     if (language === 'javascript' && line.includes('console.log')) {
       issues.push({
         line: index + 1,
         column: line.indexOf('console.log'),
-        message: 'Avoid console.log statements in production code',
+        message: 'Evite statements console.log em código de produção',
         severity: 'info',
         code: 'no-console',
+        category: 'bestPractices'
       });
     }
     
-    // Check for TODO comments
+    // Verificar comentários TODO
     if (line.includes('TODO')) {
       issues.push({
         line: index + 1,
         column: line.indexOf('TODO'),
-        message: 'TODO comment found',
+        message: 'Comentário TODO encontrado',
         severity: 'info',
         code: 'no-todo',
+        category: 'cleanCode'
       });
     }
     
-    // Check for potential complexity
+    // Verificar potencial complexidade
     if (
       (language === 'javascript' || language === 'java' || language === 'csharp') && 
       (line.includes('if ') || line.includes('for ') || line.includes('while '))
@@ -76,69 +154,121 @@ export const analyzeCode = (code: string, language: SupportedLanguage): Analysis
     }
   });
   
-  // Calculate metrics
-  const maintainability = Math.max(0, 100 - (issues.length * 5) - (complexity * 2));
-  const score = Math.max(0, 100 - (issues.filter(i => i.severity === 'error').length * 10) - 
-                          (issues.filter(i => i.severity === 'warning').length * 3) - 
-                          (complexity * 2));
+  // Contar problemas por categoria
+  const performanceIssues = issues.filter(i => i.category === 'performance').length;
+  const accessibilityIssues = issues.filter(i => i.category === 'accessibility').length;
+  const bestPracticesIssues = issues.filter(i => i.category === 'bestPractices').length;
+  const seoIssues = issues.filter(i => i.category === 'seo').length;
+  const cleanCodeIssues = issues.filter(i => i.category === 'cleanCode').length;
   
-  // Generate suggestions
+  // Calcular métricas
+  const perfScore = Math.max(0, 100 - (performanceIssues * 10));
+  const a11yScore = Math.max(0, 100 - (accessibilityIssues * 15));
+  const bpScore = Math.max(0, 100 - (bestPracticesIssues * 8));
+  const seoScore = Math.max(0, 100 - (seoIssues * 12));
+  const cleanCodeScore = Math.max(0, 100 - (cleanCodeIssues * 8) - (complexity * 3));
+  
+  const maintainability = Math.max(0, 100 - (issues.length * 5) - (complexity * 2));
+  
+  // Score geral ponderado por categoria
+  const score = Math.round(
+    (perfScore * 0.2) + 
+    (a11yScore * 0.2) + 
+    (bpScore * 0.2) + 
+    (seoScore * 0.15) + 
+    (cleanCodeScore * 0.25)
+  );
+  
+  // Gerar sugestões
   const suggestions = [
-    'Consider breaking down complex functions into smaller, more manageable pieces',
-    'Add meaningful comments to explain complex logic',
-    'Use consistent naming conventions for variables and functions',
-    'Consider adding error handling for robust code',
-    'Follow the principle of single responsibility for functions and classes'
+    'Quebre funções complexas em partes menores e mais gerenciáveis',
+    'Adicione comentários significativos para explicar lógica complexa',
+    'Use convenções de nomenclatura consistentes para variáveis e funções',
+    'Considere adicionar tratamento de erros para código robusto',
+    'Siga o princípio de responsabilidade única para funções e classes',
+    'Refatore código duplicado em funções reutilizáveis',
+    'Priorize a acessibilidade usando atributos ARIA e alt em imagens',
+    'Otimize operações DOM para melhor desempenho',
+    'Considere implementar lazy loading para melhorar o tempo de carregamento',
+    'Use nomes de variáveis descritivos conforme recomendado no livro "Código Limpo"'
   ];
   
   if (issues.some(i => i.code === 'max-len')) {
-    suggestions.push('Break long lines into multiple lines for better readability');
+    suggestions.push('Quebre linhas longas em múltiplas linhas para melhor legibilidade');
   }
   
   if (issues.some(i => i.code === 'no-console')) {
-    suggestions.push('Replace console.log with proper logging mechanisms');
+    suggestions.push('Substitua console.log por mecanismos de logging adequados');
   }
+  
+  // Filtrar sugestões relevantes com base nas categorias dos problemas encontrados
+  const relevantSuggestions = suggestions.filter((_, i) => {
+    if (performanceIssues > 0 && [7, 8].includes(i)) return true;
+    if (accessibilityIssues > 0 && i === 6) return true;
+    if (bestPracticesIssues > 0 && [2, 3, 5].includes(i)) return true;
+    if (cleanCodeIssues > 0 && [0, 1, 4, 9].includes(i)) return true;
+    return Math.random() > 0.5; // Seleção aleatória para outras
+  });
   
   return {
     issues,
     metrics: {
       linesOfCode,
       complexity,
-      maintainability
+      maintainability,
+      performance: perfScore,
+      accessibility: a11yScore,
+      bestPractices: bpScore,
+      seo: seoScore,
+      cleanCode: cleanCodeScore
     },
-    suggestions: suggestions.slice(0, 4 + Math.floor(Math.random() * 2)), // Random subset of suggestions
-    score
+    suggestions: relevantSuggestions.slice(0, 4 + Math.floor(Math.random() * 3)),
+    score,
+    categoriesScore: {
+      performance: perfScore,
+      accessibility: a11yScore,
+      bestPractices: bpScore,
+      seo: seoScore,
+      cleanCode: cleanCodeScore
+    }
   };
 };
 
-// Generate a detailed report from the analysis results
+// Gerar relatório detalhado a partir dos resultados da análise
 export const generateReport = (result: AnalysisResult, language: SupportedLanguage): string => {
-  const { issues, metrics, suggestions, score } = result;
+  const { issues, metrics, suggestions, score, categoriesScore } = result;
   
   const report = `
-# Code Quality Report
+# Relatório de Qualidade de Código
 
-## Summary
-- Language: ${language.toUpperCase()}
-- Quality Score: ${score}/100
-- Lines of Code: ${metrics.linesOfCode}
-- Complexity: ${metrics.complexity}/10
-- Maintainability: ${metrics.maintainability}/100
+## Resumo
+- Linguagem: ${language.toUpperCase()}
+- Pontuação de Qualidade: ${score}/100
+- Linhas de Código: ${metrics.linesOfCode}
+- Complexidade: ${metrics.complexity}/10
+- Manutenibilidade: ${metrics.maintainability}/100
 
-## Issues Found
+## Pontuação por Categoria
+- Desempenho: ${categoriesScore.performance}/100
+- Acessibilidade: ${categoriesScore.accessibility}/100
+- Boas Práticas: ${categoriesScore.bestPractices}/100
+- SEO: ${categoriesScore.seo}/100
+- Código Limpo: ${categoriesScore.cleanCode}/100
+
+## Problemas Encontrados
 ${issues.length > 0 
-  ? issues.map(issue => `- **${issue.severity.toUpperCase()}** Line ${issue.line}: ${issue.message}`).join('\n')
-  : '- No issues found. Great job!'}
+  ? issues.map(issue => `- **${issue.severity.toUpperCase()}** Linha ${issue.line}: ${issue.message} (${issue.category || 'geral'})`).join('\n')
+  : '- Nenhum problema encontrado. Ótimo trabalho!'}
 
-## Improvement Suggestions
+## Sugestões de Melhoria
 ${suggestions.map(suggestion => `- ${suggestion}`).join('\n')}
 
-## Next Steps
-1. Address the highlighted issues
-2. Consider the improvement suggestions
-3. Re-run the analysis to track progress
+## Próximos Passos
+1. Resolva os problemas destacados
+2. Considere as sugestões de melhoria
+3. Execute a análise novamente para acompanhar o progresso
 
-_Generated by Quality Maven ${new Date().toLocaleDateString()}_
+_Gerado pelo Analisador de Código Huta ${new Date().toLocaleDateString()}_
   `;
   
   return report;
