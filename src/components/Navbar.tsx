@@ -3,13 +3,14 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Code2, Info } from 'lucide-react';
+import AlternadorTema from './AlternadorTema';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
 
-  const navItems = [
-    { path: '/', label: 'Code Maven', icon: <Code2 className="w-5 h-5 mr-2" /> },
-    { path: '/about', label: 'About', icon: <Info className="w-5 h-5 mr-2" /> },
+  const itensNavegacao = [
+    { path: '/', label: 'Analisador de Código', icon: <Code2 className="w-5 h-5 mr-2" /> },
+    { path: '/about', label: 'Sobre', icon: <Info className="w-5 h-5 mr-2" /> },
   ];
 
   return (
@@ -21,10 +22,10 @@ const Navbar: React.FC = () => {
             className="flex items-center text-lg font-semibold tracking-tight transition-colors"
           >
             <Code2 className="w-6 h-6 mr-2 text-primary" />
-            <span>Quality Maven</span>
+            <span>HutaDev Analisador</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-4">
-            {navItems.map((item) => (
+            {itensNavegacao.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
@@ -42,8 +43,9 @@ const Navbar: React.FC = () => {
         </div>
         
         <div className="flex items-center space-x-4">
+          <AlternadorTema />
           <a 
-            href="https://github.com" 
+            href="https://github.com/hutadev" 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-muted-foreground hover:text-foreground transition-colors"

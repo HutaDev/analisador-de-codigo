@@ -11,28 +11,28 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { SupportedLanguage, SUPPORTED_LANGUAGES, getLanguageById } from '@/utils/languageUtils';
 
-interface LanguageSelectorProps {
-  selectedLanguage: SupportedLanguage;
-  onLanguageChange: (language: SupportedLanguage) => void;
+interface SeletorLinguagemProps {
+  linguagemSelecionada: SupportedLanguage;
+  aoMudarLinguagem: (language: SupportedLanguage) => void;
 }
 
-const LanguageSelector: React.FC<LanguageSelectorProps> = ({
-  selectedLanguage,
-  onLanguageChange,
+const SeletorLinguagem: React.FC<SeletorLinguagemProps> = ({
+  linguagemSelecionada,
+  aoMudarLinguagem,
 }) => {
-  const language = getLanguageById(selectedLanguage);
+  const linguagem = getLanguageById(linguagemSelecionada);
 
   return (
     <div className="flex items-center space-x-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="flex items-center justify-between w-40 bg-background/50 backdrop-blur-sm border border-border/50">
-            <span className="truncate">{language.label}</span>
+            <span className="truncate">{linguagem.label}</span>
             <ChevronDown className="h-4 w-4 ml-2 opacity-50" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-40 glass-card animate-fade-in" align="start">
-          <DropdownMenuRadioGroup value={selectedLanguage} onValueChange={(value) => onLanguageChange(value as SupportedLanguage)}>
+          <DropdownMenuRadioGroup value={linguagemSelecionada} onValueChange={(value) => aoMudarLinguagem(value as SupportedLanguage)}>
             {SUPPORTED_LANGUAGES.map((lang) => (
               <DropdownMenuRadioItem
                 key={lang.id}
@@ -40,7 +40,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 className="cursor-pointer flex items-center justify-between px-3 py-2 text-sm"
               >
                 {lang.label}
-                {lang.id === selectedLanguage && (
+                {lang.id === linguagemSelecionada && (
                   <Check className="h-4 w-4 ml-2 text-primary" />
                 )}
               </DropdownMenuRadioItem>
@@ -52,4 +52,4 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   );
 };
 
-export default LanguageSelector;
+export default SeletorLinguagem;

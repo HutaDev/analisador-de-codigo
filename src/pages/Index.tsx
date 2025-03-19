@@ -1,51 +1,66 @@
 
 import React, { useState, useEffect } from 'react';
-import CodeEditor from '@/components/CodeEditor';
-import LanguageSelector from '@/components/LanguageSelector';
-import CodeAnalyzer from '@/components/CodeAnalyzer';
-import ResultsDisplay from '@/components/ResultsDisplay';
+import EditorCodigo from '@/components/CodeEditor';
+import SeletorLinguagem from '@/components/LanguageSelector';
+import AnalisadorCodigo from '@/components/CodeAnalyzer';
+import ExibicaoResultados from '@/components/ResultsDisplay';
 import Navbar from '@/components/Navbar';
 import { SupportedLanguage, getLanguageSample } from '@/utils/languageUtils';
 import { AnalysisResult } from '@/utils/codeAnalysis';
+import { Helmet } from 'react-helmet-async';
 
-const Index = () => {
-  const [language, setLanguage] = useState<SupportedLanguage>('javascript');
-  const [code, setCode] = useState<string>('');
-  const [analysis, setAnalysis] = useState<AnalysisResult | undefined>(undefined);
+const Inicio = () => {
+  const [linguagem, setLinguagem] = useState<SupportedLanguage>('javascript');
+  const [codigo, setCodigo] = useState<string>('');
+  const [analise, setAnalise] = useState<AnalysisResult | undefined>(undefined);
   
   useEffect(() => {
-    setCode(getLanguageSample(language));
-    setAnalysis(undefined);
-  }, [language]);
+    setCodigo(getLanguageSample(linguagem));
+    setAnalise(undefined);
+  }, [linguagem]);
 
-  const handleLanguageChange = (newLanguage: SupportedLanguage) => {
-    setLanguage(newLanguage);
+  const aoMudarLinguagem = (novaLinguagem: SupportedLanguage) => {
+    setLinguagem(novaLinguagem);
   };
   
-  const handleCodeChange = (newCode: string) => {
-    setCode(newCode);
-    // Reset analysis when code changes
-    if (analysis) {
-      setAnalysis(undefined);
+  const aoMudarCodigo = (novoCodigo: string) => {
+    setCodigo(novoCodigo);
+    // Resetar análise quando o código mudar
+    if (analise) {
+      setAnalise(undefined);
     }
   };
   
-  const handleAnalysisComplete = (result: AnalysisResult) => {
-    setAnalysis(result);
+  const aoAnaliseCompleta = (resultado: AnalysisResult) => {
+    setAnalise(resultado);
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <Helmet>
+        <title>HutaDev Analisador de Código | Melhore a qualidade do seu código</title>
+        <meta name="description" content="Ferramenta de análise de qualidade de código da HutaDev. Analise, otimize e melhore seu código HTML, CSS, JavaScript, Java, C++, C# e Python." />
+        <meta name="keywords" content="análise de código, qualidade de código, HutaDev, ferramentas para desenvolvedores, JavaScript, HTML, CSS, Java, Python" />
+        <meta property="og:title" content="HutaDev Analisador de Código" />
+        <meta property="og:description" content="Analise e melhore a qualidade do seu código com a ferramenta de análise da HutaDev." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://analisador.hutadev.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="HutaDev Analisador de Código" />
+        <meta name="twitter:description" content="Analise e melhore a qualidade do seu código com a ferramenta de análise da HutaDev." />
+        <link rel="canonical" href="https://analisador.hutadev.com" />
+      </Helmet>
+      
       <Navbar />
       
       <main className="container mx-auto px-4 pt-24 pb-12">
         <div className="mb-8 max-w-3xl mx-auto text-center animate-slide-down">
           <span className="inline-block px-3 py-1.5 rounded-full text-xs uppercase tracking-wide font-semibold bg-primary/10 text-primary mb-4">
-            Code Quality Tool
+            Ferramenta de Qualidade de Código
           </span>
-          <h1 className="text-4xl font-bold tracking-tight mb-3">Quality Maven</h1>
+          <h1 className="text-4xl font-bold tracking-tight mb-3">HutaDev Analisador</h1>
           <p className="text-xl text-muted-foreground">
-            Analyze, optimize, and improve your code quality
+            Analise, otimize e melhore a qualidade do seu código
           </p>
         </div>
         
@@ -53,33 +68,33 @@ const Index = () => {
           <div className="lg:col-span-2">
             <div className="bg-white/50 dark:bg-gray-950/50 backdrop-blur-md rounded-lg border border-border/50 p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Code Editor</h2>
-                <LanguageSelector 
-                  selectedLanguage={language} 
-                  onLanguageChange={handleLanguageChange} 
+                <h2 className="text-lg font-semibold">Editor de Código</h2>
+                <SeletorLinguagem 
+                  linguagemSelecionada={linguagem} 
+                  aoMudarLinguagem={aoMudarLinguagem} 
                 />
               </div>
               
-              <CodeEditor 
-                code={code}
-                onChange={handleCodeChange}
-                language={language}
+              <EditorCodigo 
+                codigo={codigo}
+                aoMudar={aoMudarCodigo}
+                linguagem={linguagem}
               />
               
               <div className="mt-4">
-                <CodeAnalyzer 
-                  code={code}
-                  language={language}
-                  onAnalysisComplete={handleAnalysisComplete}
+                <AnalisadorCodigo 
+                  codigo={codigo}
+                  linguagem={linguagem}
+                  aoAnaliseCompleta={aoAnaliseCompleta}
                 />
               </div>
             </div>
           </div>
           
           <div className="lg:col-span-1">
-            <ResultsDisplay 
-              result={analysis}
-              language={language}
+            <ExibicaoResultados 
+              resultado={analise}
+              linguagem={linguagem}
             />
           </div>
         </div>
@@ -87,11 +102,11 @@ const Index = () => {
       
       <footer className="border-t border-border/30 py-6 bg-secondary/20 backdrop-blur-sm">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Quality Maven. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} HutaDev Analisador. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
   );
 };
 
-export default Index;
+export default Inicio;
