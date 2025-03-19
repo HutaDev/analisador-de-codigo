@@ -10,6 +10,7 @@ import { SupportedLanguage, getLanguageSample } from '@/utils/languageUtils';
 import { AnalysisResult } from '@/utils/codeAnalysis';
 import { Helmet } from 'react-helmet-async';
 import { useLanguage } from '@/utils/languageContext';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Inicio = () => {
   const [linguagem, setLinguagem] = useState<SupportedLanguage>('javascript');
@@ -123,12 +124,12 @@ const Inicio = () => {
 };
 
 const Link = ({ to, children }: { to: string, children: React.ReactNode }) => (
-  <a 
-    href={to} 
+  <RouterLink 
+    to={to} 
     className="hover:text-foreground transition-colors"
   >
     {children}
-  </a>
+  </RouterLink>
 );
 
 export default Inicio;

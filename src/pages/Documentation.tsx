@@ -1,707 +1,760 @@
 
 import React, { useState } from 'react';
-import Navbar from '@/components/Navbar';
 import { Helmet } from 'react-helmet-async';
+import Navbar from '@/components/Navbar';
+import { Link } from 'react-router-dom';
+import { 
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from '@/components/ui/tabs';
+import { 
+  Book, 
+  Code, 
+  FileCode2, 
+  Languages, 
+  LayoutDashboard, 
+  Lightbulb, 
+  Settings, 
+  Sparkles
+} from 'lucide-react';
 import { useLanguage } from '@/utils/languageContext';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Code2, FileText, FileCode } from 'lucide-react';
 
 const PaginaDocumentacao = () => {
   const { t } = useLanguage();
-  const [tabAtiva, setTabAtiva] = useState('intro');
+  const [tabAtiva, setTabAtiva] = useState('introducao');
+
+  const handleChangeTab = (value: string) => {
+    setTabAtiva(value);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Helmet>
         <title>Documentação | Analisador de Código Huta</title>
-        <meta name="description" content="Documentação completa do Analisador de Código Huta. Aprenda a utilizar todas as funcionalidades de nossa ferramenta de análise de código." />
-        <link rel="canonical" href="https://analisador.hutadev.com/documentacao" />
+        <meta name="description" content="Documentação completa do Analisador de Código Huta. Aprenda como utilizar todas as funcionalidades da ferramenta." />
+        <meta name="keywords" content="documentação analisador código, tutorial analisador código, guia analisador código, HutaDev" />
       </Helmet>
       
       <Navbar />
       
       <main className="container mx-auto px-4 pt-24 pb-12">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-2">Documentação</h1>
-          <p className="text-lg text-muted-foreground mb-8">Guia completo do Analisador de Código Huta</p>
+        <header className="mb-12 max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Documentação</h1>
+          <p className="text-muted-foreground text-lg">
+            Guia completo do Analisador de Código Huta. Aprenda a analisar e melhorar a qualidade do seu código.
+          </p>
+        </header>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {/* Sidebar de navegação */}
+          <aside className="lg:col-span-1 lg:sticky top-24 self-start glass-card h-fit p-4 rounded-lg">
+            <nav>
+              <ul className="space-y-1">
+                <NavItem 
+                  id="introducao" 
+                  atual={tabAtiva} 
+                  onClick={() => handleChangeTab('introducao')}
+                  icon={<Book className="w-5 h-5 mr-2" />}
+                  label="Introdução"
+                />
+                <NavItem 
+                  id="comecando" 
+                  atual={tabAtiva} 
+                  onClick={() => handleChangeTab('comecando')}
+                  icon={<LayoutDashboard className="w-5 h-5 mr-2" />}
+                  label="Começando"
+                />
+                <NavItem 
+                  id="linguagens" 
+                  atual={tabAtiva} 
+                  onClick={() => handleChangeTab('linguagens')}
+                  icon={<Languages className="w-5 h-5 mr-2" />}
+                  label="Linguagens Suportadas"
+                />
+                <NavItem 
+                  id="analise" 
+                  atual={tabAtiva} 
+                  onClick={() => handleChangeTab('analise')}
+                  icon={<Sparkles className="w-5 h-5 mr-2" />}
+                  label="Processo de Análise"
+                />
+                <NavItem 
+                  id="metricas" 
+                  atual={tabAtiva} 
+                  onClick={() => handleChangeTab('metricas')}
+                  icon={<FileCode2 className="w-5 h-5 mr-2" />}
+                  label="Métricas e Pontuações"
+                />
+                <NavItem 
+                  id="exemplos" 
+                  atual={tabAtiva} 
+                  onClick={() => handleChangeTab('exemplos')}
+                  icon={<Code className="w-5 h-5 mr-2" />}
+                  label="Exemplos Práticos"
+                />
+                <NavItem 
+                  id="configuracao" 
+                  atual={tabAtiva} 
+                  onClick={() => handleChangeTab('configuracao')}
+                  icon={<Settings className="w-5 h-5 mr-2" />}
+                  label="Configurações"
+                />
+                <NavItem 
+                  id="dicas" 
+                  atual={tabAtiva} 
+                  onClick={() => handleChangeTab('dicas')}
+                  icon={<Lightbulb className="w-5 h-5 mr-2" />}
+                  label="Dicas e Truques"
+                />
+              </ul>
+            </nav>
+          </aside>
           
-          <div className="flex flex-col md:flex-row gap-8">
-            {/* Navegação lateral */}
-            <div className="w-full md:w-64 shrink-0">
-              <div className="sticky top-24 space-y-1">
-                <button 
-                  onClick={() => setTabAtiva('intro')}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium flex items-center ${
-                    tabAtiva === 'intro' 
-                      ? 'bg-primary/10 text-primary' 
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }`}
-                >
-                  <FileText className="mr-2 h-4 w-4" />
-                  Introdução
-                </button>
+          {/* Conteúdo principal */}
+          <div className="lg:col-span-3 glass-card p-6 md:p-8 rounded-lg">
+            <Tabs value={tabAtiva} onValueChange={handleChangeTab} className="w-full">
+              <TabsContent value="introducao" className="space-y-6">
+                <h2 className="text-2xl font-bold mb-4">Introdução ao Analisador de Código Huta</h2>
+                <p>
+                  O Analisador de Código Huta é uma ferramenta desenvolvida pela HutaDev para ajudar desenvolvedores a avaliar e melhorar a qualidade do seu código. A ferramenta analisa diversos aspectos como performance, acessibilidade, boas práticas e SEO.
+                </p>
                 
-                <button 
-                  onClick={() => setTabAtiva('usage')}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium flex items-center ${
-                    tabAtiva === 'usage' 
-                      ? 'bg-primary/10 text-primary' 
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }`}
-                >
-                  <Code2 className="mr-2 h-4 w-4" />
-                  Como Usar
-                </button>
+                <h3 className="text-xl font-semibold mt-6 mb-3">Por que usar o Analisador de Código Huta?</h3>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Identifica problemas de desempenho em seu código</li>
+                  <li>Verifica boas práticas de programação e princípios do "Código Limpo"</li>
+                  <li>Avalia métricas de acessibilidade para tornar seu código mais inclusivo</li>
+                  <li>Verifica problemas de SEO em códigos HTML</li>
+                  <li>Fornece sugestões personalizadas para melhorar seu código</li>
+                  <li>Suporta múltiplas linguagens de programação</li>
+                </ul>
                 
-                <button 
-                  onClick={() => setTabAtiva('languages')}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium flex items-center ${
-                    tabAtiva === 'languages' 
-                      ? 'bg-primary/10 text-primary' 
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }`}
-                >
-                  <FileCode className="mr-2 h-4 w-4" />
-                  Linguagens Suportadas
-                </button>
-                
-                <button 
-                  onClick={() => setTabAtiva('metrics')}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium flex items-center ${
-                    tabAtiva === 'metrics' 
-                      ? 'bg-primary/10 text-primary' 
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                  </svg>
-                  Métricas e Pontuação
-                </button>
-                
-                <button 
-                  onClick={() => setTabAtiva('examples')}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium flex items-center ${
-                    tabAtiva === 'examples' 
-                      ? 'bg-primary/10 text-primary' 
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
-                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <path d="M12 18v-6"/>
-                    <path d="M8 18v-1"/>
-                    <path d="M16 18v-3"/>
-                  </svg>
-                  Exemplos
-                </button>
-              </div>
-            </div>
-            
-            {/* Conteúdo principal */}
-            <div className="flex-1">
-              {tabAtiva === 'intro' && (
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                  <h2>Introdução ao Analisador de Código Huta</h2>
+                <div className="bg-secondary/30 p-4 rounded-lg mt-6">
+                  <h4 className="font-semibold mb-2">Sobre a HutaDev</h4>
                   <p>
-                    O Analisador de Código Huta é uma ferramenta avançada desenvolvida pela HutaDev para auxiliar desenvolvedores 
-                    a melhorar a qualidade de seu código. Nossa ferramenta analisa seu código em tempo real, identificando 
-                    problemas e fornecendo recomendações baseadas em práticas modernas de desenvolvimento de software.
-                  </p>
-                  
-                  <h3>O que nossa ferramenta analisa:</h3>
-                  <ul>
-                    <li><strong>Performance</strong> - Detecta gargalos e sugere otimizações</li>
-                    <li><strong>Acessibilidade</strong> - Verifica conformidade com padrões de acessibilidade</li>
-                    <li><strong>Boas Práticas</strong> - Identifica padrões de código recomendados</li>
-                    <li><strong>SEO</strong> - Analisa elementos importantes para motores de busca</li>
-                    <li><strong>Código Limpo</strong> - Baseado nos princípios do livro "Código Limpo" de Robert C. Martin</li>
-                  </ul>
-                  
-                  <p>
-                    Nossa análise fornece não apenas uma lista de problemas, mas também explicações educativas 
-                    e sugestões de melhoria, tornando-a uma valiosa ferramenta de aprendizado para desenvolvedores 
-                    de todos os níveis.
+                    Na HutaDev, desenvolvemos sites e componentes web para startups e sites de negócios, oferecendo soluções personalizadas para melhorar sua presença online. Nossa missão é simplificar as complexidades das startups modernas de negócios e tecnologia, permitindo que nossos clientes se concentrem no que realmente importa - seu crescimento e sucesso.
                   </p>
                 </div>
-              )}
+              </TabsContent>
               
-              {tabAtiva === 'usage' && (
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                  <h2>Como Usar o Analisador</h2>
-                  
-                  <h3>Guia Rápido</h3>
-                  <ol>
-                    <li>Selecione a linguagem de programação no menu suspenso</li>
-                    <li>Cole ou digite seu código no editor</li>
-                    <li>Clique no botão "Analisar Código"</li>
-                    <li>Revise os resultados da análise na seção de resultados</li>
-                  </ol>
-                  
-                  <h3>Detalhes da Interface</h3>
-                  <p>
-                    O editor de código oferece destaque de sintaxe para facilitar a leitura. Você pode escrever 
-                    diretamente no editor ou colar código de suas aplicações.
-                  </p>
-                  
-                  <p>
-                    Os resultados da análise são divididos em três abas:
-                  </p>
-                  <ul>
-                    <li><strong>Problemas</strong> - Lista de problemas encontrados, categorizados por tipo e severidade</li>
-                    <li><strong>Sugestões</strong> - Recomendações específicas para melhorar seu código</li>
-                    <li><strong>Relatório</strong> - Resumo completo da análise, que pode ser copiado para seu clipboard</li>
-                  </ul>
-                  
-                  <h3>Dicas de Uso</h3>
-                  <ul>
-                    <li>Analise pequenos trechos de código por vez para resultados mais focados</li>
-                    <li>Use o relatório para documentar o progresso em revisões de código</li>
-                    <li>Compare pontuações antes e depois das alterações para medir melhorias</li>
-                  </ul>
+              <TabsContent value="comecando" className="space-y-6">
+                <h2 className="text-2xl font-bold mb-4">Começando com o Analisador de Código</h2>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-3">Passos básicos para começar</h3>
+                <ol className="list-decimal pl-6 space-y-4">
+                  <li>
+                    <strong>Selecione uma linguagem</strong>: Escolha entre HTML, CSS, JavaScript, Java, C++, C# ou Python usando o seletor de linguagem no topo do editor.
+                  </li>
+                  <li>
+                    <strong>Insira ou cole seu código</strong>: Utilize o editor para inserir o código que deseja analisar. O editor possui destaque de sintaxe para facilitar a leitura.
+                  </li>
+                  <li>
+                    <strong>Clique em "Analisar Código"</strong>: Após inserir seu código, clique no botão para iniciar a análise.
+                  </li>
+                  <li>
+                    <strong>Revise os resultados</strong>: Um relatório detalhado será gerado com pontuações, problemas encontrados e sugestões de melhoria.
+                  </li>
+                </ol>
+                
+                <div className="bg-secondary/30 p-6 rounded-lg mt-6">
+                  <h4 className="font-semibold mb-3">Interface do Analisador</h4>
+                  <div className="space-y-3">
+                    <p><strong>Editor de Código</strong>: Área onde você insere seu código com destaque de sintaxe.</p>
+                    <p><strong>Seletor de Linguagem</strong>: Permite escolher a linguagem do código que será analisada.</p>
+                    <p><strong>Botão de Análise</strong>: Inicia o processo de análise do código.</p>
+                    <p><strong>Painel de Resultados</strong>: Exibe a pontuação, métricas, problemas encontrados e sugestões.</p>
+                  </div>
                 </div>
-              )}
+              </TabsContent>
               
-              {tabAtiva === 'languages' && (
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                  <h2>Linguagens Suportadas</h2>
-                  <p>
-                    Atualmente, o Analisador de Código Huta suporta as seguintes linguagens de programação:
-                  </p>
-                  
-                  <Tabs defaultValue="frontend">
-                    <TabsList>
-                      <TabsTrigger value="frontend">Frontend</TabsTrigger>
-                      <TabsTrigger value="backend">Backend</TabsTrigger>
-                    </TabsList>
-                    
-                    <TabsContent value="frontend" className="mt-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="border rounded-lg p-4">
-                          <h3 className="text-lg font-medium mb-2">HTML</h3>
-                          <p className="text-sm text-muted-foreground">
-                            Analisa estrutura semântica, acessibilidade e boas práticas de marcação.
-                          </p>
-                          <div className="mt-2 bg-secondary/30 p-2 rounded text-xs font-mono">
-                            &lt;!DOCTYPE html&gt;<br />
-                            &lt;html lang="pt"&gt;<br />
-                            &nbsp;&nbsp;&lt;head&gt;<br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Exemplo&lt;/title&gt;<br />
-                            &nbsp;&nbsp;&lt;/head&gt;<br />
-                            &nbsp;&nbsp;&lt;body&gt;<br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Olá Mundo&lt;/h1&gt;<br />
-                            &nbsp;&nbsp;&lt;/body&gt;<br />
-                            &lt;/html&gt;
-                          </div>
-                        </div>
-                        
-                        <div className="border rounded-lg p-4">
-                          <h3 className="text-lg font-medium mb-2">CSS</h3>
-                          <p className="text-sm text-muted-foreground">
-                            Verifica eficiência, organização e padrões modernos de estilização.
-                          </p>
-                          <div className="mt-2 bg-secondary/30 p-2 rounded text-xs font-mono">
-                            body {'{'}
-                            <br />&nbsp;&nbsp;font-family: sans-serif;
-                            <br />&nbsp;&nbsp;margin: 0;
-                            <br />&nbsp;&nbsp;padding: 20px;
-                            <br />{'}'}
-                            <br />
-                            <br />h1 {'{'}
-                            <br />&nbsp;&nbsp;color: #333;
-                            <br />{'}'}
-                          </div>
-                        </div>
-                        
-                        <div className="border rounded-lg p-4">
-                          <h3 className="text-lg font-medium mb-2">JavaScript</h3>
-                          <p className="text-sm text-muted-foreground">
-                            Analisa performance, práticas modernas e padrões de código limpo.
-                          </p>
-                          <div className="mt-2 bg-secondary/30 p-2 rounded text-xs font-mono">
-                            function calcularFatorial(n) {'{'}
-                            <br />&nbsp;&nbsp;if (n <= 1) return 1;
-                            <br />&nbsp;&nbsp;return n * calcularFatorial(n - 1);
-                            <br />{'}'}
-                            <br />
-                            <br />console.log(calcularFatorial(5));
-                          </div>
-                        </div>
-                      </div>
-                    </TabsContent>
-                    
-                    <TabsContent value="backend" className="mt-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="border rounded-lg p-4">
-                          <h3 className="text-lg font-medium mb-2">Python</h3>
-                          <p className="text-sm text-muted-foreground">
-                            Verifica estilo PEP8, boas práticas e eficiência de código.
-                          </p>
-                          <div className="mt-2 bg-secondary/30 p-2 rounded text-xs font-mono">
-                            def fatorial(n):
-                            <br />&nbsp;&nbsp;if n <= 1:
-                            <br />&nbsp;&nbsp;&nbsp;&nbsp;return 1
-                            <br />&nbsp;&nbsp;return n * fatorial(n - 1)
-                            <br />
-                            <br />print(fatorial(5))
-                          </div>
-                        </div>
-                        
-                        <div className="border rounded-lg p-4">
-                          <h3 className="text-lg font-medium mb-2">Java</h3>
-                          <p className="text-sm text-muted-foreground">
-                            Analisa padrões OOP, convenções de nomenclatura e boas práticas.
-                          </p>
-                          <div className="mt-2 bg-secondary/30 p-2 rounded text-xs font-mono">
-                            public class Exemplo {'{'}
-                            <br />&nbsp;&nbsp;public static int fatorial(int n) {'{'}
-                            <br />&nbsp;&nbsp;&nbsp;&nbsp;if (n <= 1) return 1;
-                            <br />&nbsp;&nbsp;&nbsp;&nbsp;return n * fatorial(n - 1);
-                            <br />&nbsp;&nbsp;{'}'}
-                            <br />
-                            <br />&nbsp;&nbsp;public static void main(String[] args) {'{'}
-                            <br />&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(fatorial(5));
-                            <br />&nbsp;&nbsp;{'}'}
-                            <br />{'}'}
-                          </div>
-                        </div>
-                        
-                        <div className="border rounded-lg p-4">
-                          <h3 className="text-lg font-medium mb-2">C#</h3>
-                          <p className="text-sm text-muted-foreground">
-                            Verifica convenções .NET, padrões de design e práticas de codificação.
-                          </p>
-                          <div className="mt-2 bg-secondary/30 p-2 rounded text-xs font-mono">
-                            using System;
-                            <br />
-                            <br />class Programa {'{'}
-                            <br />&nbsp;&nbsp;static int Fatorial(int n) {'{'}
-                            <br />&nbsp;&nbsp;&nbsp;&nbsp;if (n <= 1) return 1;
-                            <br />&nbsp;&nbsp;&nbsp;&nbsp;return n * Fatorial(n - 1);
-                            <br />&nbsp;&nbsp;{'}'}
-                            <br />
-                            <br />&nbsp;&nbsp;static void Main() {'{'}
-                            <br />&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(Fatorial(5));
-                            <br />&nbsp;&nbsp;{'}'}
-                            <br />{'}'}
-                          </div>
-                        </div>
-                        
-                        <div className="border rounded-lg p-4">
-                          <h3 className="text-lg font-medium mb-2">C++</h3>
-                          <p className="text-sm text-muted-foreground">
-                            Analisa eficiência, gerenciamento de memória e padrões modernos de C++.
-                          </p>
-                          <div className="mt-2 bg-secondary/30 p-2 rounded text-xs font-mono">
-                            #include &lt;iostream&gt;
-                            <br />
-                            <br />int fatorial(int n) {'{'}
-                            <br />&nbsp;&nbsp;if (n <= 1) return 1;
-                            <br />&nbsp;&nbsp;return n * fatorial(n - 1);
-                            <br />{'}'}
-                            <br />
-                            <br />int main() {'{'}
-                            <br />&nbsp;&nbsp;std::cout &lt;&lt; fatorial(5);
-                            <br />&nbsp;&nbsp;return 0;
-                            <br />{'}'}
-                          </div>
-                        </div>
-                      </div>
-                    </TabsContent>
-                  </Tabs>
-                </div>
-              )}
-              
-              {tabAtiva === 'metrics' && (
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                  <h2>Métricas e Pontuação</h2>
-                  
-                  <p>
-                    O Analisador de Código Huta utiliza um sistema abrangente de métricas para avaliar 
-                    a qualidade do código. Cada análise resulta em uma pontuação global e pontuações 
-                    específicas para diferentes categorias.
-                  </p>
-                  
-                  <h3>Categorias de Análise</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose">
-                    <div className="border rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-yellow-500">
-                          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                        </svg>
-                        <h4 className="text-lg font-medium">Performance (20%)</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Avalia a eficiência do código, identificando operações que podem causar lentidão ou uso excessivo de recursos.
-                      </p>
-                      <ul className="mt-2 text-sm space-y-1">
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Uso eficiente de loops e iterações
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Minimização de operações DOM
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Otimização de algoritmos
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div className="border rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-blue-500">
-                          <circle cx="12" cy="12" r="10"/>
-                          <circle cx="12" cy="12" r="4"/>
-                          <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>
-                          <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>
-                          <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/>
-                          <line x1="14.83" y1="9.17" x2="18.36" y2="5.64"/>
-                          <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/>
-                        </svg>
-                        <h4 className="text-lg font-medium">Acessibilidade (20%)</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Verifica se o código segue padrões de acessibilidade, garantindo que o conteúdo seja acessível a todos os usuários.
-                      </p>
-                      <ul className="mt-2 text-sm space-y-1">
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Uso adequado de atributos ARIA
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Contraste de cores suficiente
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Textos alternativos para imagens
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div className="border rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-purple-500">
-                          <path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/>
-                          <path d="M10 2c1 .5 2 2 2 5"/>
-                        </svg>
-                        <h4 className="text-lg font-medium">Boas Práticas (20%)</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Avalia se o código segue convenções estabelecidas e padrões recomendados pela indústria.
-                      </p>
-                      <ul className="mt-2 text-sm space-y-1">
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Uso de nomenclatura consistente
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Estrutura de código organizada
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Tratamento adequado de erros
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div className="border rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-green-500">
-                          <circle cx="11" cy="11" r="8"/>
-                          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                        </svg>
-                        <h4 className="text-lg font-medium">SEO (15%)</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Verifica elementos que afetam a otimização para motores de busca (relevante para HTML).
-                      </p>
-                      <ul className="mt-2 text-sm space-y-1">
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Estrutura de cabeçalhos adequada
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Meta tags corretamente implementadas
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Uso semântico de elementos HTML
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div className="border rounded-lg p-4 md:col-span-2">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-indigo-500">
-                          <polyline points="16 18 22 12 16 6"/>
-                          <polyline points="8 6 2 12 8 18"/>
-                        </svg>
-                        <h4 className="text-lg font-medium">Código Limpo (25%)</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Baseado nos princípios do livro "Código Limpo" de Robert C. Martin, avalia a legibilidade, 
-                        manutenibilidade e organização do código.
-                      </p>
-                      <ul className="mt-2 text-sm grid grid-cols-1 md:grid-cols-2 gap-1">
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Funções pequenas e focadas
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Nomes descritivos e significativos
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Ausência de duplicação de código
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-primary">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          Comentários claros e úteis
-                        </li>
-                      </ul>
-                    </div>
+              <TabsContent value="linguagens" className="space-y-6">
+                <h2 className="text-2xl font-bold mb-4">Linguagens Suportadas</h2>
+                <p>
+                  O Analisador de Código Huta suporta várias linguagens de programação populares, permitindo uma análise especializada para cada tipo de código.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold mb-2">HTML</h3>
+                    <p>Análise de estrutura, acessibilidade e práticas de SEO em documentos HTML.</p>
                   </div>
                   
-                  <h3 className="mt-6">Cálculo da Pontuação</h3>
-                  <p>
-                    A pontuação final é calculada como uma média ponderada das pontuações de cada categoria, 
-                    com os pesos indicados acima. Cada categoria é avaliada em uma escala de 0 a 100.
-                  </p>
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold mb-2">CSS</h3>
+                    <p>Verificação de eficiência, compatibilidade e boas práticas em estilos CSS.</p>
+                  </div>
                   
-                  <div className="not-prose bg-secondary/30 p-4 rounded-md">
-                    <p className="font-semibold">Interpretação da Pontuação Final:</p>
-                    <ul className="mt-2 space-y-2">
-                      <li className="flex items-center">
-                        <span className="h-3 w-3 rounded-full bg-green-500 mr-2"></span>
-                        <span><strong className="text-green-500">80-100:</strong> Excelente - Código de alta qualidade com poucas ou nenhuma melhoria necessária</span>
-                      </li>
-                      <li className="flex items-center">
-                        <span className="h-3 w-3 rounded-full bg-amber-500 mr-2"></span>
-                        <span><strong className="text-amber-500">60-79:</strong> Bom - Código de qualidade razoável com algumas melhorias recomendadas</span>
-                      </li>
-                      <li className="flex items-center">
-                        <span className="h-3 w-3 rounded-full bg-red-500 mr-2"></span>
-                        <span><strong className="text-red-500">0-59:</strong> Precisa de Atenção - Código com problemas significativos que requerem atenção</span>
-                      </li>
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold mb-2">JavaScript</h3>
+                    <p>Análise de performance, segurança e qualidade de código JavaScript.</p>
+                  </div>
+                  
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold mb-2">Java</h3>
+                    <p>Verificação de estrutura, eficiência e boas práticas de programação em Java.</p>
+                  </div>
+                  
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold mb-2">C++</h3>
+                    <p>Análise de eficiência, gerenciamento de memória e convenções de código em C++.</p>
+                  </div>
+                  
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold mb-2">C#</h3>
+                    <p>Verificação de padrões de design, performance e qualidade de código em C#.</p>
+                  </div>
+                  
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h3 className="text-lg font-semibold mb-2">Python</h3>
+                    <p>Análise de legibilidade, eficiência e aderência ao PEP 8 em código Python.</p>
+                  </div>
+                </div>
+                
+                <div className="mt-6 p-4 border border-border rounded-lg">
+                  <h4 className="font-semibold mb-2">Nota sobre análise específica por linguagem</h4>
+                  <p>
+                    Cada linguagem possui características e boas práticas específicas. O analisador adapta seus critérios de avaliação de acordo com a linguagem selecionada para fornecer resultados relevantes e precisos.
+                  </p>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="analise" className="space-y-6">
+                <h2 className="text-2xl font-bold mb-4">Processo de Análise</h2>
+                <p>
+                  O Analisador de Código Huta realiza uma análise abrangente do seu código, considerando múltiplos fatores para avaliar sua qualidade. Entenda como funciona esse processo:
+                </p>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-3">Como seu código é analisado</h3>
+                <ol className="list-decimal pl-6 space-y-4">
+                  <li>
+                    <strong>Verificação sintática</strong>: Primeiro, o código é verificado para garantir que não há erros de sintaxe básicos.
+                  </li>
+                  <li>
+                    <strong>Análise estrutural</strong>: A estrutura do código é avaliada em termos de organização, tamanho de funções e classes.
+                  </li>
+                  <li>
+                    <strong>Verificação de padrões</strong>: O código é examinado para identificar padrões conhecidos de problemas e anti-padrões.
+                  </li>
+                  <li>
+                    <strong>Avaliação de métricas</strong>: São calculadas métricas como complexidade ciclomática, linhas de código e manutenibilidade.
+                  </li>
+                  <li>
+                    <strong>Análise por categoria</strong>: O código é analisado em categorias específicas:
+                    <ul className="list-disc pl-6 mt-2 space-y-1">
+                      <li><strong>Performance</strong>: Eficiência e otimização do código</li>
+                      <li><strong>Acessibilidade</strong>: Conformidade com padrões de acessibilidade</li>
+                      <li><strong>Boas Práticas</strong>: Adesão a convenções e padrões da indústria</li>
+                      <li><strong>SEO</strong>: Otimização para mecanismos de busca (para HTML)</li>
+                      <li><strong>Código Limpo</strong>: Princípios de código limpo baseados na obra de Robert C. Martin</li>
                     </ul>
+                  </li>
+                  <li>
+                    <strong>Geração de pontuação</strong>: Com base em todas as análises, uma pontuação geral e pontuações por categoria são calculadas.
+                  </li>
+                  <li>
+                    <strong>Criação de sugestões</strong>: O sistema gera sugestões personalizadas para melhorar o código baseadas nos problemas identificados.
+                  </li>
+                </ol>
+                
+                <div className="bg-secondary/30 p-4 rounded-lg mt-6">
+                  <h4 className="font-semibold mb-2">Princípios do "Código Limpo"</h4>
+                  <p>
+                    Nossa análise incorpora princípios do livro "Código Limpo" de Robert C. Martin, incluindo:
+                  </p>
+                  <ul className="list-disc pl-6 mt-2">
+                    <li>Nomes significativos para variáveis e funções</li>
+                    <li>Funções pequenas com uma única responsabilidade</li>
+                    <li>Comentários apropriados e significativos</li>
+                    <li>Formatação consistente do código</li>
+                    <li>Tratamento adequado de erros</li>
+                    <li>Minimização de duplicação de código</li>
+                  </ul>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="metricas" className="space-y-6">
+                <h2 className="text-2xl font-bold mb-4">Métricas e Pontuações</h2>
+                <p>
+                  O Analisador de Código Huta utiliza diversas métricas para avaliar a qualidade do seu código. Entenda como cada pontuação é calculada e o que ela representa.
+                </p>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-3">Métricas principais</h3>
+                
+                <div className="space-y-4">
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Pontuação de Qualidade</h4>
+                    <p className="mt-1">
+                      Uma pontuação geral de 0-100 que representa a qualidade do código. Esta é uma média ponderada das pontuações por categoria, com pesos diferentes para cada aspecto.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Linhas de Código</h4>
+                    <p className="mt-1">
+                      Contagem total de linhas no código analisado. Não é uma métrica de qualidade por si só, mas é útil para contextualizar outras métricas.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Complexidade</h4>
+                    <p className="mt-1">
+                      Baseada na complexidade ciclomática, esta métrica (escala 1-10) indica quão complexo é o código em termos de caminhos de execução e estruturas de controle.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Manutenibilidade</h4>
+                    <p className="mt-1">
+                      Pontuação de 0-100 que indica a facilidade com que o código pode ser mantido, modificado e entendido por outros desenvolvedores.
+                    </p>
                   </div>
                 </div>
-              )}
+                
+                <h3 className="text-xl font-semibold mt-8 mb-3">Pontuações por categoria</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-yellow-500/10 p-4 rounded-lg">
+                    <h4 className="font-semibold text-yellow-600 dark:text-yellow-400">Performance (0-100)</h4>
+                    <p className="mt-1">
+                      Avalia a eficiência do código, identificando problemas que podem causar lentidão ou consumo excessivo de recursos.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-blue-500/10 p-4 rounded-lg">
+                    <h4 className="font-semibold text-blue-600 dark:text-blue-400">Acessibilidade (0-100)</h4>
+                    <p className="mt-1">
+                      Verifica se o código segue práticas de acessibilidade, especialmente importante para código HTML e JavaScript para interfaces.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-purple-500/10 p-4 rounded-lg">
+                    <h4 className="font-semibold text-purple-600 dark:text-purple-400">Boas Práticas (0-100)</h4>
+                    <p className="mt-1">
+                      Avalia a aderência a convenções e práticas recomendadas específicas da linguagem selecionada.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-green-500/10 p-4 rounded-lg">
+                    <h4 className="font-semibold text-green-600 dark:text-green-400">SEO (0-100)</h4>
+                    <p className="mt-1">
+                      Aplicável principalmente a HTML, avalia práticas que afetam a otimização para mecanismos de busca.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-indigo-500/10 p-4 rounded-lg md:col-span-2">
+                    <h4 className="font-semibold text-indigo-600 dark:text-indigo-400">Código Limpo (0-100)</h4>
+                    <p className="mt-1">
+                      Baseada nos princípios do livro "Código Limpo", avalia a legibilidade, estrutura e manutenibilidade do código.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="mt-6 p-4 bg-muted/40 rounded-lg">
+                  <h4 className="font-semibold mb-2">Interpretação das pontuações</h4>
+                  <ul className="space-y-2">
+                    <li><strong className="text-green-500">80-100</strong>: Excelente qualidade de código</li>
+                    <li><strong className="text-amber-500">60-79</strong>: Boa qualidade, com algumas melhorias recomendadas</li>
+                    <li><strong className="text-red-500">0-59</strong>: Necessita de atenção significativa e melhorias</li>
+                  </ul>
+                </div>
+              </TabsContent>
               
-              {tabAtiva === 'examples' && (
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                  <h2>Exemplos Práticos</h2>
-                  <p>
-                    Aqui estão alguns exemplos de como o Analisador de Código Huta pode ajudar a identificar e resolver problemas comuns:
-                  </p>
-                  
-                  <h3>Exemplo 1: Melhorando Performance em JavaScript</h3>
-                  
-                  <div className="not-prose bg-secondary/30 p-4 rounded-md mb-6">
-                    <p className="font-medium mb-2">Código Original:</p>
-                    <pre className="bg-background/50 p-3 rounded text-xs overflow-x-auto">
-{`// Função para encontrar elementos em uma lista
-function encontrarElementos(lista, criterio) {
-  var resultados = [];
-  
-  for (var i = 0; i < lista.length; i++) {
-    // Verificar cada elemento na lista
-    if (lista[i].includes(criterio)) {
-      resultados.push(lista[i]);
-    }
+              <TabsContent value="exemplos" className="space-y-6">
+                <h2 className="text-2xl font-bold mb-4">Exemplos Práticos</h2>
+                <p>
+                  Veja exemplos de como o Analisador de Código Huta identifica problemas e sugere melhorias em diferentes linguagens.
+                </p>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-3">Exemplo em JavaScript</h3>
+                
+                <div className="space-y-4">
+                  <div className="bg-secondary/20 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2">Código original com problemas:</h4>
+                    <pre className="bg-secondary/40 p-3 rounded text-sm overflow-x-auto">
+{`// Função que calcula o total
+function calc(a,b,type) {
+  var res;
+  if(type == 'add') {
+    res = a + b;
   }
-  
-  return resultados;
+  if(type == 'subtract') {
+    res = a - b;
+  }
+  if(type == 'multiply') {
+    res = a * b;
+  }
+  if(type == 'divide') {
+    res = a / b;
+  }
+  return res;
 }
 
-// Uso repetido em vários lugares do código
-var elementos = ['maçã', 'banana', 'abacaxi', 'morango'];
-var resultado1 = encontrarElementos(elementos, 'a');
-var resultado2 = encontrarElementos(elementos, 'n');
-var resultado3 = encontrarElementos(elementos, 'm');`}
-                    </pre>
-                    
-                    <p className="font-medium mt-4 mb-2">Problemas Identificados:</p>
-                    <ul className="space-y-1 text-sm">
-                      <li className="flex items-start">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-red-500 mr-1 mt-0.5">
-                          <circle cx="12" cy="12" r="10"/>
-                          <line x1="12" y1="8" x2="12" y2="12"/>
-                          <line x1="12" y1="16" x2="12.01" y2="16"/>
-                        </svg>
-                        Uso de <code>var</code> em vez de <code>let</code>/<code>const</code> (Boas Práticas)
-                      </li>
-                      <li className="flex items-start">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-amber-500 mr-1 mt-0.5">
-                          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                        </svg>
-                        Verificação ineficiente com loop tradicional (Performance)
-                      </li>
-                      <li className="flex items-start">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-blue-500 mr-1 mt-0.5">
-                          <circle cx="12" cy="12" r="10"/>
-                          <line x1="12" y1="16" x2="12" y2="12"/>
-                          <line x1="12" y1="8" x2="12.01" y2="8"/>
-                        </svg>
-                        Comentários não explicam o "porquê" (Código Limpo)
-                      </li>
-                    </ul>
-                    
-                    <p className="font-medium mt-4 mb-2">Código Melhorado:</p>
-                    <pre className="bg-background/50 p-3 rounded text-xs overflow-x-auto">
-{`// Função para encontrar elementos em uma lista que contêm um critério específico
-function encontrarElementos(lista, criterio) {
-  // Usa filter para uma implementação mais declarativa e performática
-  return lista.filter(item => item.includes(criterio));
-}
-
-// Armazena elementos em uma constante já que não será modificada
-const elementos = ['maçã', 'banana', 'abacaxi', 'morango'];
-
-// Usa a função com diferentes critérios
-const resultado1 = encontrarElementos(elementos, 'a');
-const resultado2 = encontrarElementos(elementos, 'n');
-const resultado3 = encontrarElementos(elementos, 'm');`}
+// Uso da função
+document.querySelectorAll('.button').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var x = document.getElementById('input1').value;
+    var y = document.getElementById('input2').value;
+    var op = this.getAttribute('data-operation');
+    var result = calc(parseInt(x), parseInt(y), op);
+    console.log(result);
+    document.getElementById('result').innerHTML = result;
+  });
+});`}
                     </pre>
                   </div>
                   
-                  <h3>Exemplo 2: Melhorando Acessibilidade em HTML</h3>
-                  
-                  <div className="not-prose bg-secondary/30 p-4 rounded-md">
-                    <p className="font-medium mb-2">Código Original:</p>
-                    <pre className="bg-background/50 p-3 rounded text-xs overflow-x-auto">
-{`<div class="cabecalho">
-  <div class="logo">
-    <img src="logo.png" />
-  </div>
-  <div class="menu">
-    <div class="menu-item">Home</div>
-    <div class="menu-item">Produtos</div>
-    <div class="menu-item">Contato</div>
-  </div>
-</div>
-
-<div class="conteudo">
-  <div class="titulo">Nossos Produtos</div>
-  <div class="produtos">
-    <div class="produto">
-      <img src="produto1.jpg" />
-      <div class="nome">Produto 1</div>
-      <div class="preco">R$ 99,90</div>
-      <div class="botao">Comprar</div>
-    </div>
-  </div>
-</div>`}
-                    </pre>
-                    
-                    <p className="font-medium mt-4 mb-2">Problemas Identificados:</p>
-                    <ul className="space-y-1 text-sm">
-                      <li className="flex items-start">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-red-500 mr-1 mt-0.5">
-                          <circle cx="12" cy="12" r="10"/>
-                          <line x1="12" y1="8" x2="12" y2="12"/>
-                          <line x1="12" y1="16" x2="12.01" y2="16"/>
-                        </svg>
-                        Imagens sem atributo alt (Acessibilidade)
-                      </li>
-                      <li className="flex items-start">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-amber-500 mr-1 mt-0.5">
-                          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                        </svg>
-                        Uso de div em vez de elementos semânticos (SEO, Acessibilidade)
-                      </li>
-                      <li className="flex items-start">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-blue-500 mr-1 mt-0.5">
-                          <circle cx="12" cy="12" r="10"/>
-                          <line x1="12" y1="16" x2="12" y2="12"/>
-                          <line x1="12" y1="8" x2="12.01" y2="8"/>
-                        </svg>
-                        Elementos interativos não acessíveis (Acessibilidade)
-                      </li>
+                  <div className="bg-secondary/20 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2">Problemas identificados:</h4>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li className="text-amber-500">Uso de <code>var</code> em vez de <code>let/const</code> (Boas Práticas)</li>
+                      <li className="text-amber-500">Uso de <code>==</code> em vez de <code>===</code> (Boas Práticas)</li>
+                      <li className="text-amber-500">Uso de múltiplos <code>if</code> em vez de <code>if/else if</code> ou <code>switch</code> (Código Limpo)</li>
+                      <li className="text-amber-500">Uso repetido de <code>document.querySelectorAll</code> afeta a performance (Performance)</li>
+                      <li className="text-amber-500">Uso de <code>console.log</code> em código de produção (Boas Práticas)</li>
+                      <li className="text-amber-500">Nomes de variáveis curtos e não descritivos (Código Limpo)</li>
                     </ul>
-                    
-                    <p className="font-medium mt-4 mb-2">Código Melhorado:</p>
-                    <pre className="bg-background/50 p-3 rounded text-xs overflow-x-auto">
-{`<header class="cabecalho">
-  <div class="logo">
-    <img src="logo.png" alt="Logo da empresa" />
-  </div>
-  <nav class="menu" aria-label="Menu principal">
-    <ul>
-      <li><a href="#" class="menu-item">Home</a></li>
-      <li><a href="#" class="menu-item">Produtos</a></li>
-      <li><a href="#" class="menu-item">Contato</a></li>
-    </ul>
-  </nav>
-</header>
+                  </div>
+                  
+                  <div className="bg-secondary/20 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2">Código melhorado:</h4>
+                    <pre className="bg-secondary/40 p-3 rounded text-sm overflow-x-auto">
+{`// Função que calcula o total de dois números
+function calcular(numero1, numero2, operacao) {
+  switch (operacao) {
+    case 'add':
+      return numero1 + numero2;
+    case 'subtract':
+      return numero1 - numero2;
+    case 'multiply':
+      return numero1 * numero2;
+    case 'divide':
+      if (numero2 === 0) {
+        throw new Error('Divisão por zero não permitida');
+      }
+      return numero1 / numero2;
+    default:
+      throw new Error('Operação não suportada');
+  }
+}
 
-<main class="conteudo">
-  <h1 class="titulo">Nossos Produtos</h1>
-  <section class="produtos">
-    <article class="produto">
-      <img src="produto1.jpg" alt="Descrição do Produto 1" />
-      <h2 class="nome">Produto 1</h2>
-      <p class="preco">R$ 99,90</p>
-      <button class="botao" aria-label="Comprar Produto 1">Comprar</button>
-    </article>
-  </section>
-</main>`}
+// Cache dos elementos DOM para melhor performance
+const botoes = document.querySelectorAll('.button');
+const input1 = document.getElementById('input1');
+const input2 = document.getElementById('input2');
+const resultadoElemento = document.getElementById('result');
+
+// Adiciona listeners aos botões
+botoes.forEach(botao => {
+  botao.addEventListener('click', () => {
+    const valor1 = parseInt(input1.value, 10);
+    const valor2 = parseInt(input2.value, 10);
+    const operacao = botao.getAttribute('data-operation');
+    
+    try {
+      const resultado = calcular(valor1, valor2, operacao);
+      resultadoElemento.textContent = resultado;
+    } catch (erro) {
+      resultadoElemento.textContent = 'Erro: ' + erro.message;
+    }
+  });
+});`}
                     </pre>
                   </div>
                 </div>
-              )}
-            </div>
+                
+                <h3 className="text-xl font-semibold mt-8 mb-3">Exemplo em HTML</h3>
+                
+                <div className="space-y-4">
+                  <div className="bg-secondary/20 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2">Código original com problemas:</h4>
+                    <pre className="bg-secondary/40 p-3 rounded text-sm overflow-x-auto">
+{`<!DOCTYPE html>
+<html>
+<head>
+  <title>Minha Página</title>
+</head>
+<body>
+  <h1>Bem-vindo ao meu site</h1>
+  <h1>Outro título principal</h1>
+  
+  <div>
+    <img src="logo.png" />
+    <button onclick="fazerAlgo()">Clique Aqui</button>
+  </div>
+  
+  <table>
+    <tr>
+      <td>Nome</td>
+      <td>Email</td>
+    </tr>
+    <tr>
+      <td>João</td>
+      <td>joao@exemplo.com</td>
+    </tr>
+  </table>
+</body>
+</html>`}
+                    </pre>
+                  </div>
+                  
+                  <div className="bg-secondary/20 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2">Problemas identificados:</h4>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li className="text-red-500">Múltiplas tags H1 prejudicam o SEO (SEO)</li>
+                      <li className="text-red-500">Imagem sem atributo alt (Acessibilidade)</li>
+                      <li className="text-amber-500">Falta de meta description para SEO (SEO)</li>
+                      <li className="text-amber-500">Uso de event handlers inline (Boas Práticas)</li>
+                      <li className="text-amber-500">Tabela sem elementos de cabeçalho semânticos (Acessibilidade)</li>
+                      <li className="text-amber-500">Falta de atributo lang na tag html (Acessibilidade)</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-secondary/20 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2">Código melhorado:</h4>
+                    <pre className="bg-secondary/40 p-3 rounded text-sm overflow-x-auto">
+{`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Descrição da página para melhorar SEO">
+  <title>Minha Página</title>
+</head>
+<body>
+  <header>
+    <h1>Bem-vindo ao meu site</h1>
+  </header>
+  
+  <section>
+    <h2>Outro título importante</h2>
+    
+    <div>
+      <img src="logo.png" alt="Logo da empresa" />
+      <button id="botaoAcao">Clique Aqui</button>
+    </div>
+  </section>
+  
+  <section>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>João</td>
+          <td>joao@exemplo.com</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  
+  <script>
+    document.getElementById('botaoAcao').addEventListener('click', function() {
+      fazerAlgo();
+    });
+    
+    function fazerAlgo() {
+      // Implementação da ação
+    }
+  </script>
+</body>
+</html>`}
+                    </pre>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="configuracao" className="space-y-6">
+                <h2 className="text-2xl font-bold mb-4">Configurações</h2>
+                <p>
+                  O Analisador de Código Huta oferece opções de personalização para melhorar sua experiência de uso.
+                </p>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-3">Preferências de Interface</h3>
+                
+                <div className="space-y-4">
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Modo Claro/Escuro</h4>
+                    <p className="mt-1">
+                      Alterne entre o modo claro e escuro da interface utilizando o botão na barra de navegação. O sistema também detecta automaticamente a preferência do seu sistema.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Seleção de Idioma</h4>
+                    <p className="mt-1">
+                      Escolha entre vários idiomas disponíveis: Português (padrão), Inglês, Francês, Espanhol, Japonês, Árabe, Chinês e Russo. A seleção de idioma pode ser feita através do botão no canto superior direito.
+                    </p>
+                  </div>
+                </div>
+                
+                <h3 className="text-xl font-semibold mt-8 mb-3">Personalização do Editor</h3>
+                
+                <div className="space-y-4">
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Tamanho da Fonte</h4>
+                    <p className="mt-1">
+                      Ajuste o tamanho da fonte no editor para melhorar a legibilidade de acordo com sua preferência.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Destacamento de Sintaxe</h4>
+                    <p className="mt-1">
+                      O editor apresenta destacamento de sintaxe específico para cada linguagem suportada, melhorando a legibilidade do código.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Amostras de Código</h4>
+                    <p className="mt-1">
+                      Ao selecionar uma nova linguagem, o editor carrega automaticamente uma amostra de código para ajudar você a começar.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="bg-secondary/30 p-4 rounded-lg mt-6">
+                  <h4 className="font-semibold mb-2">Salvando Preferências</h4>
+                  <p>
+                    Suas preferências de idioma e tema são salvas automaticamente no seu navegador para futuras visitas. Você pode alterar essas configurações a qualquer momento.
+                  </p>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="dicas" className="space-y-6">
+                <h2 className="text-2xl font-bold mb-4">Dicas e Truques</h2>
+                <p>
+                  Aproveite ao máximo o Analisador de Código Huta com estas dicas e estratégias avançadas.
+                </p>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-3">Maximizando a pontuação</h3>
+                
+                <div className="space-y-4">
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h4 className="font-semibold">Concentre-se em problemas críticos primeiro</h4>
+                    <p className="mt-1">
+                      Problemas marcados como "error" têm maior impacto na pontuação. Priorize a correção destes antes de abordar avisos e informações.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h4 className="font-semibold">Atenção à complexidade</h4>
+                    <p className="mt-1">
+                      Funções e métodos complexos reduzem significativamente a pontuação de manutenibilidade. Divida funções grandes em partes menores e mais gerenciáveis.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-secondary/30 p-4 rounded-lg">
+                    <h4 className="font-semibold">Siga as sugestões de melhoria</h4>
+                    <p className="mt-1">
+                      As sugestões são personalizadas com base nos problemas encontrados em seu código. Implementá-las pode melhorar substancialmente sua pontuação.
+                    </p>
+                  </div>
+                </div>
+                
+                <h3 className="text-xl font-semibold mt-8 mb-3">Técnicas avançadas</h3>
+                
+                <div className="space-y-4">
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Análise incremental</h4>
+                    <p className="mt-1">
+                      Para projetos grandes, analise o código por partes ou módulos. Isso permite focar em melhorias específicas antes de passar para a próxima seção.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Compare versões</h4>
+                    <p className="mt-1">
+                      Após fazer melhorias, compare os resultados da análise atual com a anterior para verificar o progresso e identificar novas áreas para melhoria.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 border border-border rounded-lg">
+                    <h4 className="font-semibold">Use o relatório para documentação</h4>
+                    <p className="mt-1">
+                      O relatório gerado pode ser copiado e utilizado como parte da documentação do projeto, demonstrando a qualidade do código e áreas de melhoria futura.
+                    </p>
+                  </div>
+                </div>
+                
+                <h3 className="text-xl font-semibold mt-8 mb-3">Princípios de código limpo</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-indigo-500/10 p-4 rounded-lg">
+                    <h4 className="font-semibold text-indigo-600 dark:text-indigo-400">DRY (Don't Repeat Yourself)</h4>
+                    <p className="mt-1">
+                      Evite duplicação de código. Extraia código repetido para funções ou classes reutilizáveis.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-indigo-500/10 p-4 rounded-lg">
+                    <h4 className="font-semibold text-indigo-600 dark:text-indigo-400">KISS (Keep It Simple, Stupid)</h4>
+                    <p className="mt-1">
+                      Mantenha seu código simples e direto. Soluções complexas são difíceis de manter e entender.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-indigo-500/10 p-4 rounded-lg">
+                    <h4 className="font-semibold text-indigo-600 dark:text-indigo-400">SRP (Single Responsibility Principle)</h4>
+                    <p className="mt-1">
+                      Cada função ou classe deve ter uma única responsabilidade, uma razão única para mudar.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-indigo-500/10 p-4 rounded-lg">
+                    <h4 className="font-semibold text-indigo-600 dark:text-indigo-400">Nomes significativos</h4>
+                    <p className="mt-1">
+                      Use nomes descritivos para variáveis, funções e classes. O nome deve revelar a intenção.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-indigo-500/10 p-4 rounded-lg md:col-span-2">
+                    <h4 className="font-semibold text-indigo-600 dark:text-indigo-400">Comentários apropriados</h4>
+                    <p className="mt-1">
+                      Comente o porquê, não o quê. Bom código deve ser auto-explicativo, mas comentários são úteis para explicar intenções e decisões.
+                    </p>
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </main>
-      
-      <footer className="border-t border-border/30 py-6 bg-secondary/20 backdrop-blur-sm">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} HutaDev Analisador. {t("footer.rights")}</p>
-        </div>
-      </footer>
     </div>
+  );
+};
+
+interface NavItemProps {
+  id: string;
+  atual: string;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}
+
+const NavItem: React.FC<NavItemProps> = ({ id, atual, onClick, icon, label }) => {
+  const isAtivo = id === atual;
+  
+  return (
+    <li>
+      <button
+        onClick={onClick}
+        className={`w-full flex items-center px-3 py-2 rounded-md text-sm transition-colors ${
+          isAtivo 
+            ? 'bg-primary/10 text-primary font-medium' 
+            : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+        }`}
+      >
+        {icon}
+        <span>{label}</span>
+      </button>
+    </li>
   );
 };
 
